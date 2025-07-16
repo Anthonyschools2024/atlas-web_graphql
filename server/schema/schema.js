@@ -2,10 +2,26 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
-  GraphQLSchema // GraphQLSchema is needed to create the schema
+  GraphQLSchema
 } = require('graphql');
+const _ = require('lodash');
 
-// 1. Define the Task Type
+// Dummy data
+const tasks = [
+  {
+    id: '1',
+    title: 'Create your first webpage',
+    weight: 1,
+    description: 'Create your first HTML file 0-index.html with: -Add the doctype on the first line (without any comment) -After the doctype, open and close a html tag Open your file in your browser (the page should be blank)'
+  },
+  {
+    id: '2',
+    title: 'Structure your webpage',
+    weight: 1,
+    description: 'Copy the content of 0-index.html into 1-index.html Create the head and body sections inside the html tag, create the head and body tags (empty) in this order'
+  }
+];
+
 const TaskType = new GraphQLObjectType({
   name: 'Task',
   fields: () => ({
@@ -16,24 +32,20 @@ const TaskType = new GraphQLObjectType({
   })
 });
 
-// 2. Create the Root Query
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
     task: {
       type: TaskType,
-      // Arguments required to query for a specific task
       args: { id: { type: GraphQLString } },
-      // The function that retrieves the data
       resolve(parent, args) {
-        // Code to get data from db / other source will go here.
-        // args.id will contain the ID passed by the client.
+        // Use lodash to find the task by id from the dummy data array
+        return _.find(tasks, { id: args.id });
       }
     }
   }
 });
 
-// 3. Export the schema with the RootQuery
 module.exports = new GraphQLSchema({
   query: RootQuery
 });

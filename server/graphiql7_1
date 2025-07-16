@@ -1,0 +1,6 @@
+mutation {
+  addProject(title: "Portfolio Website", weight: 2, description: "A new personal portfolio website built with modern tech.") {
+    id
+    title
+  }
+}

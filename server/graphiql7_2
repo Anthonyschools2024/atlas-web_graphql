@@ -1,0 +1,8 @@
+# IMPORTANT: Replace "PROJECT_ID_HERE" with an actual project ID from your database.
+# You can get one by running the addProject mutation first or querying all projects.
+mutation {
+  addTask(title: "Setup React structure", weight: 1, description: "Initialize the React project and create the component folders.", projectId: "PROJECT_ID_HERE") {
+    id
+    title
+  }
+}

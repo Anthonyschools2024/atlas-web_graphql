@@ -1,12 +1,10 @@
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
-// Require the schema we just created
 const schema = require('./schema/schema');
 
 const app = express();
 
 app.use('/graphql', graphqlHTTP({
-  // Pass the schema to the middleware
   schema: schema,
   // Enable GraphiQL for in-browser testing
   graphiql: true

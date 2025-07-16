@@ -5,9 +5,8 @@ const {
   GraphQLSchema,
   GraphQLID,
   GraphQLList,
-  GraphQLNonNull // Import GraphQLNonNull
+  GraphQLNonNull
 } = require('graphql');
-const _ = require('lodash');
 
 // Import Mongoose Models
 const Project = require('../models/project.js');
@@ -24,7 +23,7 @@ const TaskType = new GraphQLObjectType({
     project: {
       type: ProjectType,
       resolve(parent, args) {
-        // Fetch project from DB based on task's projectId
+        // Find the project associated with this task from the database
         return Project.findById(parent.projectId);
       }
     }
@@ -41,7 +40,7 @@ const ProjectType = new GraphQLObjectType({
     tasks: {
       type: new GraphQLList(TaskType),
       resolve(parent, args) {
-        // Find all tasks with this project's ID
+        // Find all tasks associated with this project from the database
         return Task.find({ projectId: parent.id });
       }
     }
@@ -56,6 +55,7 @@ const RootQuery = new GraphQLObjectType({
       type: TaskType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
+        // Find a single task by ID from the database
         return Task.findById(args.id);
       }
     },
@@ -63,19 +63,22 @@ const RootQuery = new GraphQLObjectType({
       type: ProjectType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
+        // Find a single project by ID from the database
         return Project.findById(args.id);
       }
     },
     tasks: {
       type: new GraphQLList(TaskType),
       resolve(parent, args) {
-        return Task.find({}); // Find all tasks
+        // Find all tasks from the database
+        return Task.find({});
       }
     },
     projects: {
       type: new GraphQLList(ProjectType),
       resolve(parent, args) {
-        return Project.find({}); // Find all projects
+        // Find all projects from the database
+        return Project.find({});
       }
     }
   }
@@ -122,8 +125,7 @@ const Mutation = new GraphQLObjectType({
   }
 });
 
-
 module.exports = new GraphQLSchema({
   query: RootQuery,
-  mutation: Mutation // Add Mutation to the schema
+  mutation: Mutation
 });
